@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Termo de Responsabilidade — Gerador</title>
+<link rel="icon" href="assets/favicon.ico">
+<link rel="stylesheet" href="css/style.css">
+<script>
+  // Aplica o tema ANTES de a página pintar, senão apareceria um "flash" da cor
+  // errada. Por isso é um script inline no <head>, e não em script.js (que é
+  // module, portanto adiado para depois do HTML). Sem preferência salva,
+  // seguimos a do sistema operacional.
+  (function () {
+    var salvo = null;
+    try { salvo = localStorage.getItem('tema'); } catch (e) { /* modo privado */ }
+    var claro = salvo
+      ? salvo === 'claro'
+      : window.matchMedia('(prefers-color-scheme: light)').matches;
+    document.documentElement.dataset.tema = claro ? 'claro' : 'escuro';
+  })();
+</script>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <!-- O menu em si é montado por js/menu.js -->
+    <button type="button" class="menu-toggle" id="menu-abrir" aria-haspopup="dialog" aria-controls="menu-lateral" title="Menu" aria-label="Abrir menu">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+    <img class="topbar-logo" src="assets/logo.png" alt="Termsgen">
+    <span class="topbar-divider"></span>
+    <span class="topbar-title">Gerador de Termo de Responsabilidade</span>
+    <button type="button" class="tema-toggle" id="tema-toggle" title="Alternar tema claro e escuro" aria-label="Alternar tema claro e escuro">
+      <svg class="tema-icone tema-icone-sol" viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="12" r="4.2"/>
+        <path d="M12 2.5v2.2M12 19.3v2.2M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6"/>
+      </svg>
+      <svg class="tema-icone tema-icone-lua" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M20.5 14.8A8.6 8.6 0 0 1 9.2 3.5a8.6 8.6 0 1 0 11.3 11.3Z"/>
+      </svg>
+    </button>
+    <button type="button" class="sair" id="sair">Sair</button>
+  </div>
+</header>
+
+<div class="page-intro">
+  <p>Preencha os dados do equipamento e do colaborador para gerar o PDF.</p>
+</div>
+
+
+<form id="form-termo" novalidate>
+
+  <!-- 1. EMPRESA / MODELO -->
+  <section class="step" data-step="1">
+    <div class="step-num" aria-hidden="true">
+      <span class="step-num-valor">1</span>
+      <svg class="step-num-check" viewBox="0 0 24 24"><path d="M4 12.5 9.5 18 20 6.5"/></svg>
+    </div>
+    <div class="step-body">
+      <h2>
+        <svg class="step-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 21h18M5 21V5a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v16M15 21V9h3a1 1 0 0 1 1 1v11M8 8h4M8 12h4M8 16h4"/>
+        </svg>
+        Empresa e tipo de termo
+      </h2>
+      <div class="field">
+        <label for="empresa">Selecione a empresa e o tipo de termo</label>
+        <select id="empresa" name="empresa" required>
+          <option value="" disabled selected>Escolha uma opção…</option>
+          <option value="EMPRESA_A.docx">EMPRESA A — Responsabilidade</option>
+          <option value="EMPRESA_A_dev.docx">EMPRESA A — Devolução</option>
+          <option value="EMPRESA_A_fer.docx">EMPRESA A — Férias</option>
+          <option value="EMPRESA_B.docx">EMPRESA B — Responsabilidade</option>
+          <option value="EMPRESA_B_dev.docx">EMPRESA B — Devolução</option>
+          <option value="EMPRESA_B_fer.docx">EMPRESA B — Férias</option>
+          <option value="EMPRESA_C.docx">EMPRESA C — Responsabilidade</option>
+          <option value="EMPRESA_C_dev.docx">EMPRESA C — Devolução</option>
+          <option value="EMPRESA_C_fer.docx">EMPRESA C — Férias</option>
+          <option value="EMPRESA_D.docx">EMPRESA D — Responsabilidade</option>
+          <option value="EMPRESA_D_dev.docx">EMPRESA D — Devolução</option>
+          <option value="EMPRESA_D_fer.docx">EMPRESA D — Férias</option>
+        </select>
+        <span class="erro" data-erro="empresa"></span>
+      </div>
+
+      <div class="field-row">
+        <div class="field field-small">
+          <label for="dia">Dia do mês</label>
+          <input type="number" id="dia" name="dia" min="1" max="31" placeholder="1–31" required>
+          <span class="erro" data-erro="dia"></span>
+        </div>
+        <div class="field">
+          <label for="mes">Mês</label>
+          <select id="mes" name="mes" required>
+            <option value="" disabled selected>Escolha o mês…</option>
+            <option>Janeiro</option><option>Fevereiro</option><option>Março</option>
+            <option>Abril</option><option>Maio</option><option>Junho</option>
+            <option>Julho</option><option>Agosto</option><option>Setembro</option>
+            <option>Outubro</option><option>Novembro</option><option>Dezembro</option>
+          </select>
+          <span class="erro" data-erro="mes"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. DISPOSITIVO -->
+  <section class="step" data-step="2">
+    <div class="step-num" aria-hidden="true">
+      <span class="step-num-valor">2</span>
+      <svg class="step-num-check" viewBox="0 0 24 24"><path d="M4 12.5 9.5 18 20 6.5"/></svg>
+    </div>
+    <div class="step-body">
+      <h2>
+        <svg class="step-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M10.5 18.5h3"/>
+        </svg>
+        Dados do aparelho
+      </h2>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="modelCel">Modelo do telefone</label>
+          <input type="text" id="modelCel" name="modelCel" placeholder="Ex: GALAXY S25 FE" required>
+          <span class="erro" data-erro="modelCel"></span>
+        </div>
+        <div class="field field-medio">
+          <label for="eC">Estado do aparelho</label>
+          <select id="eC" name="eC" required>
+            <option value="N">Novo</option>
+            <option value="B">Bom</option>
+            <option value="R">Regular</option>
+            <option value="BMU">Bom - com marcas de uso</option>
+            <option value="RMU">Regular - com marcas de uso</option>
+          </select>
+          <span class="erro" data-erro="eC"></span>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="serialNumber">Número de série</label>
+          <input type="text" id="serialNumber" name="serialNumber" placeholder="6 a 20 caracteres" required>
+          <span class="erro" data-erro="serialNumber"></span>
+        </div>
+        <div class="field">
+          <label for="valor">Valor do telefone</label>
+          <input type="text" id="valor" name="valor" placeholder="Ex: 1500 ou 1500,50" required>
+          <span class="erro" data-erro="valor"></span>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="imei1">IMEI 1</label>
+          <input type="text" id="imei1" name="imei1" placeholder="15 dígitos" inputmode="numeric" required>
+          <span class="erro" data-erro="imei1"></span>
+        </div>
+        <div class="field">
+          <label for="imei2">IMEI 2</label>
+          <input type="text" id="imei2" name="imei2" placeholder="15 dígitos" inputmode="numeric" required>
+          <span class="erro" data-erro="imei2"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. ACESSÓRIOS -->
+  <section class="step" data-step="3">
+    <div class="step-num" aria-hidden="true">
+      <span class="step-num-valor">3</span>
+      <svg class="step-num-check" viewBox="0 0 24 24"><path d="M4 12.5 9.5 18 20 6.5"/></svg>
+    </div>
+    <div class="step-body">
+      <h2>
+        <svg class="step-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5v-9Z"/><path d="M3 7.5 12 12l9-4.5M12 12v9"/>
+        </svg>
+        Acessórios que acompanham o aparelho
+      </h2>
+
+      <div class="acessorio">
+        <label class="toggle">
+          <input type="checkbox" id="CaboSincUsb" name="CaboSincUsb" checked>
+          <span>Cabo de sincronização USB</span>
+        </label>
+        <select name="eU" id="eU" class="estado-condicional">
+          <option value="N">Novo</option><option value="B">Bom</option><option value="R">Regular</option>
+        </select>
+      </div>
+
+      <div class="acessorio">
+        <label class="toggle">
+          <input type="checkbox" id="carregador" name="carregador" checked>
+          <span>Carregador</span>
+        </label>
+        <select name="eCr" id="eCr" class="estado-condicional">
+          <option value="N">Novo</option><option value="B">Bom</option><option value="R">Regular</option>
+        </select>
+      </div>
+
+      <div class="acessorio">
+        <label class="toggle">
+          <input type="checkbox" id="capaEPelic" name="capaEPelic" checked>
+          <span>Capa e película</span>
+        </label>
+        <select name="eCp" id="eCp" class="estado-condicional">
+          <option value="N">Novo</option><option value="B">Bom</option><option value="R">Regular</option>
+        </select>
+      </div>
+
+      <!-- Desmarcado por padrão: no termo, a linha do cordão só aparece quando marcado. -->
+      <div class="acessorio">
+        <label class="toggle">
+          <input type="checkbox" id="cordao" name="cordao">
+          <span>Cordão</span>
+        </label>
+        <select name="eCord" id="eCord" class="estado-condicional">
+          <option value="N">Novo</option><option value="B">Bom</option><option value="R">Regular</option>
+        </select>
+      </div>
+
+      <div class="acessorio">
+        <label class="toggle">
+          <input type="checkbox" id="temEtiqueta" name="temEtiqueta" checked>
+          <span>Possui etiqueta de identificação</span>
+        </label>
+        <div class="etiqueta-condicional">
+          <input type="text" id="etiqueta" name="etiqueta" placeholder="Número da etiqueta">
+          <span class="erro" data-erro="etiqueta"></span>
+        </div>
+      </div>
+
+      <div class="acessorio acessorio-chip">
+        <label class="toggle">
+          <input type="checkbox" id="temChip" name="temChip" checked>
+          <span>Acompanha chip (número de telefone)</span>
+        </label>
+        <select name="eCip" id="eCip" class="estado-condicional">
+          <option value="">Sem número associado</option>
+          <option value="N">Novo</option><option value="B">Bom</option><option value="R">Regular</option>
+        </select>
+        <div class="numero-condicional">
+          <input type="text" id="numeroTel" name="numeroTel" placeholder="Ex: 92 999999999">
+          <span class="erro" data-erro="numeroTel"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. COLABORADOR -->
+  <section class="step" data-step="4">
+    <div class="step-num" aria-hidden="true">
+      <span class="step-num-valor">4</span>
+      <svg class="step-num-check" viewBox="0 0 24 24"><path d="M4 12.5 9.5 18 20 6.5"/></svg>
+    </div>
+    <div class="step-body">
+      <h2>
+        <svg class="step-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="8" r="3.6"/><path d="M4.5 20.5c0-3.6 3.4-5.6 7.5-5.6s7.5 2 7.5 5.6"/>
+        </svg>
+        <span id="etapa-colaborador-titulo">Dados do colaborador</span>
+      </h2>
+
+      <div class="field">
+        <label for="name">Nome completo</label>
+        <input type="text" id="name" name="name" placeholder="Nome completo do colaborador" required>
+        <span class="erro" data-erro="name"></span>
+      </div>
+
+      <div class="field-row" id="linha-setor-email">
+        <div class="field">
+          <label for="setor" id="rotulo-setor">Setor</label>
+          <input type="text" id="setor" name="setor" placeholder="Ex: SAC N1">
+          <span class="erro" data-erro="setor"></span>
+        </div>
+        <div class="field">
+          <label for="email">E-mail</label>
+          <input type="email" id="email" name="email" placeholder="nome.sobrenome@empresa.com">
+          <span class="erro" data-erro="email"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEGUNDO COLABORADOR: só aparece na assinatura dupla (/assinatura-dupla),
+       que também renumera as etapas. Vai para o PDF ({name2} e {email2} nos
+       modelos de templates/duplaAssinatura/); o setor é o mesmo do primeiro. -->
+  <section class="step hidden" data-step="segundo" id="etapa-segundo">
+    <div class="step-num" aria-hidden="true">
+      <span class="step-num-valor">5</span>
+      <svg class="step-num-check" viewBox="0 0 24 24"><path d="M4 12.5 9.5 18 20 6.5"/></svg>
+    </div>
+    <div class="step-body">
+      <h2>
+        <svg class="step-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM3.5 19.5c0-3 2.5-5 5.5-5s5.5 2 5.5 5M15 5.2a3 3 0 0 1 0 5.6M17 14.7c2 .6 3.5 2.3 3.5 4.8"/>
+        </svg>
+        Segundo colaborador
+      </h2>
+
+      <div class="field">
+        <label for="name2">Nome completo</label>
+        <input type="text" id="name2" name="name2" placeholder="Nome completo do segundo colaborador">
+        <span class="erro" data-erro="name2"></span>
+      </div>
+
+      <!-- Como o e-mail do primeiro, não existe para a EMPRESA D (regra própria). -->
+      <div class="field" id="campo-email2">
+        <label for="email2">E-mail</label>
+        <input type="email" id="email2" name="email2" placeholder="nome.sobrenome@empresa.com">
+        <span class="erro" data-erro="email2"></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. FOTOS -->
+  <section class="step" data-step="5">
+    <div class="step-num" aria-hidden="true">
+      <span class="step-num-valor">5</span>
+      <svg class="step-num-check" viewBox="0 0 24 24"><path d="M4 12.5 9.5 18 20 6.5"/></svg>
+    </div>
+    <div class="step-body">
+      <h2>
+        <svg class="step-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 8.5A1.5 1.5 0 0 1 4.5 7h2.2l1.4-2.2h7.8L17.3 7h2.2A1.5 1.5 0 0 1 21 8.5v9A1.5 1.5 0 0 1 19.5 19h-15A1.5 1.5 0 0 1 3 17.5v-9Z"/><circle cx="12" cy="13" r="3.4"/>
+        </svg>
+        Fotos do aparelho
+      </h2>
+      <div class="field-row">
+        <div class="field">
+          <label for="fotoFrente">Foto da frente</label>
+          <div class="file-drop" data-file-drop>
+            <input type="file" id="fotoFrente" name="fotoFrente" accept=".jpg,.jpeg,.png,.webp" required>
+            <div class="file-drop-visual">
+              <img class="file-drop-preview" alt="" hidden>
+              <span class="file-drop-icon">+</span>
+              <span class="file-drop-text">Clique para escolher a foto</span>
+              <span class="file-drop-filename"></span>
+            </div>
+          </div>
+          <span class="erro" data-erro="fotoFrente"></span>
+        </div>
+        <div class="field">
+          <label for="fotoVerso">Foto de trás</label>
+          <div class="file-drop" data-file-drop>
+            <input type="file" id="fotoVerso" name="fotoVerso" accept=".jpg,.jpeg,.png,.webp" required>
+            <div class="file-drop-visual">
+              <img class="file-drop-preview" alt="" hidden>
+              <span class="file-drop-icon">+</span>
+              <span class="file-drop-text">Clique para escolher a foto</span>
+              <span class="file-drop-filename"></span>
+            </div>
+          </div>
+          <span class="erro" data-erro="fotoVerso"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="action-bar">
+    <div class="progresso-trilha" role="presentation">
+      <div class="progresso-preenchida" id="progresso-barra"></div>
+    </div>
+    <div class="action-bar-inner">
+      <div class="action-status">
+        <span class="progresso-texto" id="progresso-texto">0 de 5 etapas completas</span>
+        <span id="mensagem-geral" class="mensagem-geral" role="status"></span>
+      </div>
+      <button type="submit" id="btn-gerar">
+        <span class="btn-spinner" aria-hidden="true"></span>
+        <span class="btn-label">Gerar termo em PDF</span>
+      </button>
+    </div>
+  </div>
+</form>
+
+<!-- Abre ao clicar em "Gerar termo em PDF", só quando o servidor tem o Clicksign
+     configurado (GET /api/config). Fica fora do <form> para o Enter dos campos de
+     e-mail não disparar o envio do formulário principal. -->
+<dialog class="modal-clicksign" id="modal-clicksign" aria-labelledby="modal-clicksign-titulo">
+  <div class="modal-topo">
+    <span class="modal-marca">Clicksign</span>
+    <span class="modal-ambiente" id="clicksign-ambiente"></span>
+  </div>
+
+  <!-- etapa 1: pergunta -->
+  <div class="modal-etapa" id="modal-etapa-pergunta">
+    <h2 id="modal-clicksign-titulo">Enviar para assinatura eletrônica?</h2>
+    <p class="modal-texto" id="modal-texto-pergunta">O PDF será baixado de qualquer forma. Se enviar, o colaborador recebe o link por e-mail para assinar.</p>
+    <div class="modal-acoes">
+      <button type="button" class="modal-btn modal-btn-secundario" id="modal-so-pdf">Só baixar o PDF</button>
+      <button type="button" class="modal-btn modal-btn-primario" id="modal-quero-assinar">Enviar para assinatura</button>
+    </div>
+  </div>
+
+  <!-- etapa 2: e-mail de envio -->
+  <form class="modal-etapa hidden" id="modal-etapa-email" novalidate>
+    <h2>Para qual e-mail enviar?</h2>
+    <p class="modal-texto" id="modal-texto-email">Pode ser diferente do e-mail do termo. Confira com o colaborador antes de enviar.</p>
+
+    <div class="field">
+      <label for="emailAssinatura" id="rotulo-email-assinatura">E-mail para envio da assinatura</label>
+      <input type="email" id="emailAssinatura" placeholder="E-mail que receberá o link" autocomplete="off">
+      <span class="erro" data-erro="emailAssinatura"></span>
+    </div>
+    <div class="field">
+      <label for="emailAssinaturaConfirmacao">Confirme o e-mail</label>
+      <input type="email" id="emailAssinaturaConfirmacao" placeholder="Digite o e-mail novamente" autocomplete="off">
+      <span class="erro" data-erro="emailAssinaturaConfirmacao"></span>
+    </div>
+
+    <!-- Só na assinatura dupla: o segundo colaborador também recebe o próprio link. -->
+    <div class="hidden" id="modal-emails-segundo">
+      <div class="field">
+        <label for="emailAssinatura2" id="rotulo-email-assinatura2">E-mail do segundo colaborador</label>
+        <input type="email" id="emailAssinatura2" placeholder="E-mail que receberá o link" autocomplete="off">
+        <span class="erro" data-erro="emailAssinatura2"></span>
+      </div>
+      <div class="field">
+        <label for="emailAssinatura2Confirmacao">Confirme o e-mail</label>
+        <input type="email" id="emailAssinatura2Confirmacao" placeholder="Digite o e-mail novamente" autocomplete="off">
+        <span class="erro" data-erro="emailAssinatura2Confirmacao"></span>
+      </div>
+    </div>
+
+    <p class="modal-nota">Para assinar, <span id="modal-nota-quem">o colaborador</span> confirma a identidade com um <strong>código enviado ao e-mail informado</strong> e uma <strong>selfie dinâmica</strong> pela câmera do celular ou do computador.</p>
+
+    <div class="modal-acoes">
+      <button type="button" class="modal-btn modal-btn-secundario" id="modal-voltar">Voltar</button>
+      <button type="submit" class="modal-btn modal-btn-primario">Gerar e enviar</button>
+    </div>
+  </form>
+
+  <button type="button" class="modal-fechar" id="modal-fechar" aria-label="Cancelar e voltar ao formulário">×</button>
+</dialog>
+
+<footer class="rodape">
+  <span>TERMSGEN · Tecnologia da Informação</span>
+  <button type="button" class="rodape-versao" id="rodape-versao" title="Ver novidades">Gerador de Termos v1.3</button>
+</footer>
+
+<script type="module" src="js/script.js"></script>
+</body>
+</html>

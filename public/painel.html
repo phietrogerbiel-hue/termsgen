@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Termos enviados — Gerador de Termos</title>
+<link rel="icon" href="assets/favicon.ico">
+<link rel="stylesheet" href="css/style.css">
+<script>
+  // Mesmo script de tema do index.html: aplica antes de a página pintar.
+  (function () {
+    var salvo = null;
+    try { salvo = localStorage.getItem('tema'); } catch (e) { /* modo privado */ }
+    var claro = salvo
+      ? salvo === 'claro'
+      : window.matchMedia('(prefers-color-scheme: light)').matches;
+    document.documentElement.dataset.tema = claro ? 'claro' : 'escuro';
+  })();
+</script>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner topbar-largo">
+    <!-- O menu em si é montado por js/menu.js -->
+    <button type="button" class="menu-toggle" id="menu-abrir" aria-haspopup="dialog" aria-controls="menu-lateral" title="Menu" aria-label="Abrir menu">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+    <img class="topbar-logo" src="assets/logo.png" alt="Termsgen">
+    <span class="topbar-divider"></span>
+    <span class="topbar-title">Gerador de Termo de Responsabilidade</span>
+    <a class="topo-link" href="/">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+      Novo termo
+    </a>
+    <button type="button" class="tema-toggle" id="tema-toggle" title="Alternar tema claro e escuro" aria-label="Alternar tema claro e escuro">
+      <svg class="tema-icone tema-icone-sol" viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="12" r="4.2"/>
+        <path d="M12 2.5v2.2M12 19.3v2.2M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6"/>
+      </svg>
+      <svg class="tema-icone tema-icone-lua" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M20.5 14.8A8.6 8.6 0 0 1 9.2 3.5a8.6 8.6 0 1 0 11.3 11.3Z"/>
+      </svg>
+    </button>
+    <button type="button" class="sair" id="sair">Sair</button>
+  </div>
+</header>
+
+<main class="painel">
+  <div class="painel-cabecalho">
+    <div>
+      <h1>Termos enviados</h1>
+      <p class="painel-sub">
+        Termos da pasta configurada no Clicksign<span class="painel-ambiente" id="painel-ambiente" hidden>ambiente de testes</span>
+      </p>
+    </div>
+    <div class="painel-atualizacao">
+      <span id="painel-conferido" role="status"></span>
+      <button type="button" class="painel-botao" id="painel-atualizar">Atualizar agora</button>
+    </div>
+  </div>
+
+  <!-- Os cartões de situação também são o filtro: clicar mostra só aquela situação. -->
+  <div class="painel-resumo" id="painel-resumo" role="group" aria-label="Filtrar por situação">
+    <button type="button" class="resumo-cartao" data-situacao="" aria-pressed="true">
+      <span class="resumo-numero" data-contagem="todos">–</span><span class="resumo-rotulo">Todos</span>
+    </button>
+    <button type="button" class="resumo-cartao" data-situacao="aguardando" aria-pressed="false">
+      <span class="resumo-numero" data-contagem="aguardando">–</span><span class="resumo-rotulo">Aguardando</span>
+    </button>
+    <button type="button" class="resumo-cartao" data-situacao="vencido" aria-pressed="false">
+      <span class="resumo-numero" data-contagem="vencido">–</span><span class="resumo-rotulo">Prazo vencido</span>
+    </button>
+    <button type="button" class="resumo-cartao" data-situacao="assinado" aria-pressed="false">
+      <span class="resumo-numero" data-contagem="assinado">–</span><span class="resumo-rotulo">Assinados</span>
+    </button>
+    <button type="button" class="resumo-cartao" data-situacao="cancelado" aria-pressed="false">
+      <span class="resumo-numero" data-contagem="cancelado">–</span><span class="resumo-rotulo">Cancelados</span>
+    </button>
+  </div>
+
+  <div class="painel-busca">
+    <label for="painel-busca">Buscar</label>
+    <input type="search" id="painel-busca" placeholder="Nome, e-mail ou tipo de termo" autocomplete="off">
+  </div>
+
+  <div class="painel-tabela-caixa">
+    <table class="painel-tabela">
+      <thead>
+        <tr>
+          <th scope="col">Colaborador</th>
+          <th scope="col">Termo</th>
+          <th scope="col">Enviado em</th>
+          <th scope="col">Prazo</th>
+          <th scope="col">Situação</th>
+        </tr>
+      </thead>
+      <tbody id="painel-linhas"></tbody>
+    </table>
+    <p class="painel-vazio" id="painel-vazio" hidden></p>
+  </div>
+
+  <nav class="painel-paginas" id="painel-paginas" aria-label="Páginas" hidden>
+    <span id="painel-intervalo"></span>
+    <div>
+      <button type="button" class="painel-botao" id="painel-anterior">Anterior</button>
+      <button type="button" class="painel-botao" id="painel-proxima">Próxima</button>
+    </div>
+  </nav>
+</main>
+
+<script type="module" src="js/painel.js"></script>
+</body>
+</html>

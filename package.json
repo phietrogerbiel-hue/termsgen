@@ -1,0 +1,25 @@
+{
+  "name": "termsgen-web",
+  "version": "1.5.0",
+  "private": true,
+  "description": "Gerador de termo de responsabilidade — versão web (formulário no navegador + geração de PDF).",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node --env-file-if-exists=.env src/server.js",
+    "dev": "node --env-file-if-exists=.env --watch src/server.js",
+    "clicksign:pastas": "node --env-file-if-exists=.env scripts/listar-pastas-clicksign.js",
+    "clicksign:importar": "node --env-file-if-exists=.env scripts/importar-termos-clicksign.js",
+    "login:senha": "node scripts/gerar-senha-login.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "UNLICENSED",
+  "type": "module",
+  "dependencies": {
+    "docxtemplater": "^3.69.3",
+    "docxtemplater-image-module-free": "^1.1.1",
+    "express": "^4.19.2",
+    "multer": "^1.4.5-lts.1",
+    "pizzip": "^3.2.0"
+  }
+}

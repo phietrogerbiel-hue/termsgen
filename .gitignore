@@ -1,0 +1,19 @@
+# dependências (reinstala com npm install)
+node_modules/
+
+# LibreOffice portable é pesado e específico da máquina — não precisa ir pro repo
+LibreOfficePortable/
+
+# credenciais (token do Clicksign etc.)
+.env
+
+# banco do painel: nomes e e-mails de colaboradores, nunca vai para o Git
+dados/
+
+# fotos temporárias do upload
+uploads_tmp/*
+!uploads_tmp/.gitkeep
+
+# configurações de editor
+.idea
+*.iml

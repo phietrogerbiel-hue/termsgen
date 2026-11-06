@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Em desenvolvimento — Gerador de Termos</title>
+<link rel="icon" href="assets/favicon.ico">
+<link rel="stylesheet" href="css/style.css">
+<script>
+  // Mesmo script de tema do index.html: aplica antes de a página pintar.
+  (function () {
+    var salvo = null;
+    try { salvo = localStorage.getItem('tema'); } catch (e) { /* modo privado */ }
+    var claro = salvo
+      ? salvo === 'claro'
+      : window.matchMedia('(prefers-color-scheme: light)').matches;
+    document.documentElement.dataset.tema = claro ? 'claro' : 'escuro';
+  })();
+</script>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <!-- O menu em si é montado por js/menu.js -->
+    <button type="button" class="menu-toggle" id="menu-abrir" aria-haspopup="dialog" aria-controls="menu-lateral" title="Menu" aria-label="Abrir menu">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+    <img class="topbar-logo" src="assets/logo.png" alt="Termsgen">
+    <span class="topbar-divider"></span>
+    <span class="topbar-title">Gerador de Termo de Responsabilidade</span>
+    <button type="button" class="tema-toggle" id="tema-toggle" title="Alternar tema claro e escuro" aria-label="Alternar tema claro e escuro">
+      <svg class="tema-icone tema-icone-sol" viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="12" r="4.2"/>
+        <path d="M12 2.5v2.2M12 19.3v2.2M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6"/>
+      </svg>
+      <svg class="tema-icone tema-icone-lua" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M20.5 14.8A8.6 8.6 0 0 1 9.2 3.5a8.6 8.6 0 1 0 11.3 11.3Z"/>
+      </svg>
+    </button>
+    <button type="button" class="sair" id="sair">Sair</button>
+  </div>
+</header>
+
+<!-- Página de espera das opções "Em breve" do menu. O nome do recurso vem de
+     ?recurso=... e o rótulo, da lista OPCOES em js/menu.js. -->
+<main class="em-dev">
+  <div class="em-dev-mascote">
+    <svg class="em-dev-cone" viewBox="0 0 64 64" aria-hidden="true">
+      <path class="cone-corpo" d="M26.5 10h11l11 40h-33l11-40Z"/>
+      <path class="cone-faixa" d="M23.4 24h17.2l2.4 9H21l2.4-9Z"/>
+      <rect class="cone-base" x="10" y="49" width="44" height="6" rx="2"/>
+    </svg>
+  </div>
+
+  <span class="em-dev-selo">Em breve</span>
+  <h1>Em desenvolvimento</h1>
+  <p class="em-dev-texto" id="em-dev-texto">Esta parte do sistema ainda está sendo construída.</p>
+
+  <a class="em-dev-voltar" href="/">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+    Voltar ao formulário
+  </a>
+</main>
+
+<script type="module" src="js/em-desenvolvimento.js"></script>
+</body>
+</html>

@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cautela de Equipamento — Gerador de Termos</title>
+<link rel="icon" href="assets/favicon.ico">
+<link rel="stylesheet" href="css/style.css">
+<script>
+  // Mesmo script de tema do index.html: aplica antes de a página pintar.
+  (function () {
+    var salvo = null;
+    try { salvo = localStorage.getItem('tema'); } catch (e) { /* modo privado */ }
+    var claro = salvo
+      ? salvo === 'claro'
+      : window.matchMedia('(prefers-color-scheme: light)').matches;
+    document.documentElement.dataset.tema = claro ? 'claro' : 'escuro';
+  })();
+</script>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <!-- O menu em si é montado por js/menu.js -->
+    <button type="button" class="menu-toggle" id="menu-abrir" aria-haspopup="dialog" aria-controls="menu-lateral" title="Menu" aria-label="Abrir menu">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+    <img class="topbar-logo" src="assets/logo.png" alt="Termsgen">
+    <span class="topbar-divider"></span>
+    <span class="topbar-title">Cautela de Equipamento</span>
+    <button type="button" class="tema-toggle" id="tema-toggle" title="Alternar tema claro e escuro" aria-label="Alternar tema claro e escuro">
+      <svg class="tema-icone tema-icone-sol" viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="12" r="4.2"/>
+        <path d="M12 2.5v2.2M12 19.3v2.2M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6"/>
+      </svg>
+      <svg class="tema-icone tema-icone-lua" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M20.5 14.8A8.6 8.6 0 0 1 9.2 3.5a8.6 8.6 0 1 0 11.3 11.3Z"/>
+      </svg>
+    </button>
+    <button type="button" class="sair" id="sair">Sair</button>
+  </div>
+</header>
+
+<div class="page-intro">
+  <p>Preencha os dados do colaborador, os hardwares e as fotos para gerar a cautela.</p>
+</div>
+
+
+<form id="form-cautela" novalidate>
+
+  <!-- 1. TIPO DE CAUTELA -->
+  <section class="step" data-step="1">
+    <div class="step-num" aria-hidden="true">
+      <span class="step-num-valor">1</span>
+      <svg class="step-num-check" viewBox="0 0 24 24"><path d="M4 12.5 9.5 18 20 6.5"/></svg>
+    </div>
+    <div class="step-body">
+      <h2>
+        <svg class="step-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M9 5H7.5A1.5 1.5 0 0 0 6 6.5v13A1.5 1.5 0 0 0 7.5 21h9a1.5 1.5 0 0 0 1.5-1.5v-13A1.5 1.5 0 0 0 16.5 5H15M10 3.5h4a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1v-1a1 1 0 0 1 1-1ZM9.5 13.5l2 2 3.5-4"/>
+        </svg>
+        Tipo de cautela e data
+      </h2>
+      <div class="field">
+        <label for="tipo">Selecione o tipo de cautela</label>
+        <select id="tipo" name="tipo" required>
+          <option value="" disabled selected>Escolha uma opção…</option>
+          <option value="entrega">Entrega</option>
+          <option value="devolucao">Devolução</option>
+        </select>
+        <span class="erro" data-erro="tipo"></span>
+      </div>
+
+      <div class="field-row">
+        <div class="field field-small">
+          <label for="dia">Dia do mês</label>
+          <input type="number" id="dia" name="dia" min="1" max="31" placeholder="1–31" required>
+          <span class="erro" data-erro="dia"></span>
+        </div>
+        <div class="field">
+          <label for="mes">Mês</label>
+          <select id="mes" name="mes" required>
+            <option value="" disabled selected>Escolha o mês…</option>
+            <option>Janeiro</option><option>Fevereiro</option><option>Março</option>
+            <option>Abril</option><option>Maio</option><option>Junho</option>
+            <option>Julho</option><option>Agosto</option><option>Setembro</option>
+            <option>Outubro</option><option>Novembro</option><option>Dezembro</option>
+          </select>
+          <span class="erro" data-erro="mes"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. COLABORADOR -->
+  <section class="step" data-step="2">
+    <div class="step-num" aria-hidden="true">
+      <span class="step-num-valor">2</span>
+      <svg class="step-num-check" viewBox="0 0 24 24"><path d="M4 12.5 9.5 18 20 6.5"/></svg>
+    </div>
+    <div class="step-body">
+      <h2>
+        <svg class="step-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="8" r="3.6"/><path d="M4.5 20.5c0-3.6 3.4-5.6 7.5-5.6s7.5 2 7.5 5.6"/>
+        </svg>
+        Dados do colaborador
+      </h2>
+
+      <div class="field">
+        <label for="name">Nome completo</label>
+        <input type="text" id="name" name="name" placeholder="Nome completo do colaborador" required>
+        <span class="erro" data-erro="name"></span>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="usuario">Usuário</label>
+          <input type="text" id="usuario" name="usuario" placeholder="Ex: nome.sobrenome" autocomplete="off" required>
+          <span class="erro" data-erro="usuario"></span>
+        </div>
+        <div class="field">
+          <label for="setor">Setor</label>
+          <input type="text" id="setor" name="setor" placeholder="Ex: SAC N1" required>
+          <span class="erro" data-erro="setor"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. HARDWARES -->
+  <section class="step" data-step="3">
+    <div class="step-num" aria-hidden="true">
+      <span class="step-num-valor">3</span>
+      <svg class="step-num-check" viewBox="0 0 24 24"><path d="M4 12.5 9.5 18 20 6.5"/></svg>
+    </div>
+    <div class="step-body">
+      <h2>
+        <svg class="step-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="3" y="4.5" width="18" height="12" rx="1.5"/><path d="M8.5 20h7M12 16.5V20"/>
+        </svg>
+        Hardwares
+      </h2>
+      <p class="step-dica">Até 6 produtos. Só o nome do produto é obrigatório; os outros campos podem ficar em branco.</p>
+
+      <!-- As linhas são criadas por js/cautela.js a partir do modelo abaixo. -->
+      <div class="hardware-lista" id="hardware-lista"></div>
+
+      <button type="button" class="hardware-adicionar" id="hardware-adicionar">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        Adicionar produto
+      </button>
+    </div>
+  </section>
+
+  <template id="modelo-hardware">
+    <div class="hardware">
+      <div class="hardware-topo">
+        <span class="hardware-titulo"></span>
+        <button type="button" class="hardware-remover">Remover</button>
+      </div>
+      <div class="field-row">
+        <div class="field" data-campo="produto">
+          <label>Produto</label>
+          <input type="text" placeholder="Ex: LENOVO USB-C – 65W" required>
+          <span class="erro"></span>
+        </div>
+        <div class="field" data-campo="configuracao">
+          <label>Configuração</label>
+          <input type="text" placeholder="Ex: 65W">
+          <span class="erro"></span>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field" data-campo="serial">
+          <label>Número de série</label>
+          <input type="text" class="campo-codigo" placeholder="6 a 20 caracteres">
+          <span class="erro"></span>
+        </div>
+        <div class="field" data-campo="hostname">
+          <label>Hostname</label>
+          <input type="text" class="campo-codigo" placeholder="Ex: EMPRESA-NOT016">
+          <span class="erro"></span>
+        </div>
+        <div class="field" data-campo="etiqueta">
+          <label>Etiqueta (ativo)</label>
+          <input type="text" class="campo-codigo" placeholder="6 dígitos" inputmode="numeric">
+          <span class="erro"></span>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <!-- 4. FOTOS -->
+  <section class="step" data-step="4">
+    <div class="step-num" aria-hidden="true">
+      <span class="step-num-valor">4</span>
+      <svg class="step-num-check" viewBox="0 0 24 24"><path d="M4 12.5 9.5 18 20 6.5"/></svg>
+    </div>
+    <div class="step-body">
+      <h2>
+        <svg class="step-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 8.5A1.5 1.5 0 0 1 4.5 7h2.2l1.4-2.2h7.8L17.3 7h2.2A1.5 1.5 0 0 1 21 8.5v9A1.5 1.5 0 0 1 19.5 19h-15A1.5 1.5 0 0 1 3 17.5v-9Z"/><circle cx="12" cy="13" r="3.4"/>
+        </svg>
+        Fotos do equipamento
+      </h2>
+      <div class="field-row">
+        <div class="field">
+          <label for="foto1">Foto 1</label>
+          <div class="file-drop" data-file-drop>
+            <input type="file" id="foto1" name="foto1" accept=".jpg,.jpeg,.png,.webp" required>
+            <div class="file-drop-visual">
+              <img class="file-drop-preview" alt="" hidden>
+              <span class="file-drop-icon">+</span>
+              <span class="file-drop-text">Clique para escolher a foto</span>
+              <span class="file-drop-filename"></span>
+            </div>
+          </div>
+          <span class="erro" data-erro="foto1"></span>
+        </div>
+        <div class="field">
+          <label for="foto2">Foto 2</label>
+          <div class="file-drop" data-file-drop>
+            <input type="file" id="foto2" name="foto2" accept=".jpg,.jpeg,.png,.webp" required>
+            <div class="file-drop-visual">
+              <img class="file-drop-preview" alt="" hidden>
+              <span class="file-drop-icon">+</span>
+              <span class="file-drop-text">Clique para escolher a foto</span>
+              <span class="file-drop-filename"></span>
+            </div>
+          </div>
+          <span class="erro" data-erro="foto2"></span>
+        </div>
+        <div class="field">
+          <label for="foto3">Foto 3 (opcional)</label>
+          <div class="file-drop" data-file-drop>
+            <input type="file" id="foto3" name="foto3" accept=".jpg,.jpeg,.png,.webp">
+            <div class="file-drop-visual">
+              <img class="file-drop-preview" alt="" hidden>
+              <span class="file-drop-icon">+</span>
+              <span class="file-drop-text">Clique para escolher a foto</span>
+              <span class="file-drop-filename"></span>
+            </div>
+          </div>
+          <button type="button" class="file-drop-remover" data-remover="foto3" hidden>Remover foto</button>
+          <span class="erro" data-erro="foto3"></span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="descricao">Descrição (opcional)</label>
+        <textarea id="descricao" name="descricao" rows="4" maxlength="500" placeholder="Ex: notebook com marcas de uso na tampa, carregador sem avarias"></textarea>
+        <div class="field-rodape">
+          <span class="erro" data-erro="descricao"></span>
+          <span class="contador" id="descricao-contador" aria-live="polite">0/500</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="action-bar">
+    <div class="progresso-trilha" role="presentation">
+      <div class="progresso-preenchida" id="progresso-barra"></div>
+    </div>
+    <div class="action-bar-inner">
+      <div class="action-status">
+        <span class="progresso-texto" id="progresso-texto">0 de 4 etapas completas</span>
+        <span id="mensagem-geral" class="mensagem-geral" role="status"></span>
+      </div>
+      <button type="submit" id="btn-gerar">
+        <span class="btn-spinner" aria-hidden="true"></span>
+        <span class="btn-label">Gerar cautela em PDF</span>
+      </button>
+    </div>
+  </div>
+</form>
+
+<!-- O mesmo modal do termo (index.html): abre ao clicar em "Gerar cautela em PDF",
+     só quando o servidor tem o Clicksign configurado (GET /api/config). Fica fora
+     do <form> para o Enter dos campos de e-mail não disparar o envio da cautela. -->
+<dialog class="modal-clicksign" id="modal-clicksign" aria-labelledby="modal-clicksign-titulo">
+  <div class="modal-topo">
+    <span class="modal-marca">Clicksign</span>
+    <span class="modal-ambiente" id="clicksign-ambiente"></span>
+  </div>
+
+  <!-- etapa 1: pergunta -->
+  <div class="modal-etapa" id="modal-etapa-pergunta">
+    <h2 id="modal-clicksign-titulo">Enviar para assinatura eletrônica?</h2>
+    <p class="modal-texto">O PDF será baixado de qualquer forma. Se enviar, o colaborador recebe o link por e-mail para assinar a cautela.</p>
+    <div class="modal-acoes">
+      <button type="button" class="modal-btn modal-btn-secundario" id="modal-so-pdf">Só baixar o PDF</button>
+      <button type="button" class="modal-btn modal-btn-primario" id="modal-quero-assinar">Enviar para assinatura</button>
+    </div>
+  </div>
+
+  <!-- etapa 2: e-mail de envio -->
+  <form class="modal-etapa hidden" id="modal-etapa-email" novalidate>
+    <h2>Para qual e-mail enviar?</h2>
+    <p class="modal-texto">Confira com o colaborador antes de enviar.</p>
+
+    <div class="field">
+      <label for="emailAssinatura">E-mail para envio da assinatura</label>
+      <input type="email" id="emailAssinatura" placeholder="E-mail que receberá o link" autocomplete="off">
+      <span class="erro" data-erro="emailAssinatura"></span>
+    </div>
+    <div class="field">
+      <label for="emailAssinaturaConfirmacao">Confirme o e-mail</label>
+      <input type="email" id="emailAssinaturaConfirmacao" placeholder="Digite o e-mail novamente" autocomplete="off">
+      <span class="erro" data-erro="emailAssinaturaConfirmacao"></span>
+    </div>
+
+    <p class="modal-nota">Para assinar, o colaborador confirma a identidade com um <strong>código enviado a este e-mail</strong> e uma <strong>selfie dinâmica</strong> pela câmera do celular ou do computador.</p>
+
+    <div class="modal-acoes">
+      <button type="button" class="modal-btn modal-btn-secundario" id="modal-voltar">Voltar</button>
+      <button type="submit" class="modal-btn modal-btn-primario">Gerar e enviar</button>
+    </div>
+  </form>
+
+  <button type="button" class="modal-fechar" id="modal-fechar" aria-label="Cancelar e voltar ao formulário">×</button>
+</dialog>
+
+<footer class="rodape">
+  <span>TERMSGEN · Tecnologia da Informação</span>
+  <button type="button" class="rodape-versao" id="rodape-versao" title="Ver novidades">Gerador de Termos v1.3</button>
+</footer>
+
+<script type="module" src="js/cautela.js"></script>
+</body>
+</html>
