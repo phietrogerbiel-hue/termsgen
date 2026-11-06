@@ -4,7 +4,7 @@
 ![Express](https://img.shields.io/badge/Express-4-000000?logo=express&logoColor=white)
 ![SQLite](https://img.shields.io/badge/SQLite-node%3Asqlite-003B57?logo=sqlite&logoColor=white)
 ![LibreOffice](https://img.shields.io/badge/LibreOffice-headless-18A303?logo=libreoffice&logoColor=white)
-![JavaScript](https://img.shields.io/badge/JavaScript-ES_modules-F7DF1E?logo=javascript&logoColor=black)
+![JavaScript](https://img.shields.io/badge/JavaScript-ES_modules-F7DF1E?logo=javascript&logoColor=F7DF1E)
 
 Sistema web para a equipe de TI gerar, em PDF, os termos de entrega, devolução e
 férias de aparelhos corporativos, enviar cada termo para assinatura eletrônica no
@@ -16,8 +16,8 @@ O formulário valida os dados no navegador e no servidor, preenche um modelo Wor
 > **Versão de demonstração.** As empresas (A, B, C e D), os modelos de termo, os
 > CNPJs e os endereços são fictícios.
 
-| Formulário | Termo gerado |
-|---|---|
+| Formulário                                               | Termo gerado                                                                        |
+| --------------------------------------------------------- | ----------------------------------------------------------------------------------- |
 | ![Formulário do termo, tema escuro](docs/formulario.png) | ![Primeira página de um termo gerado com dados fictícios](docs/termo-exemplo.png) |
 
 ## Funcionalidades
@@ -42,14 +42,14 @@ O formulário valida os dados no navegador e no servidor, preenche um modelo Wor
 
 ## Tecnologias
 
-| Camada | Tecnologias |
-|---|---|
-| Back-end | Node.js 22 (ES modules), Express 4 e Multer para o upload das fotos |
-| Banco de dados | SQLite nativo do Node (`node:sqlite`) |
-| Documentos | docxtemplater com módulo de imagem e PizZip para preencher o `.docx`; LibreOffice em modo headless para converter em PDF |
-| Integração | API REST v3 do Clicksign (envelopes, signatários e observadores), com `fetch` nativo |
-| Segurança | Módulo `crypto` do Node: hash `scrypt` com sal, comparação em tempo constante e tokens de sessão aleatórios; limite de tentativas próprio |
-| Front-end | HTML, CSS (variáveis CSS, tema claro e escuro) e JavaScript puro em ES modules, sem framework e sem etapa de build |
+| Camada         | Tecnologias                                                                                                                                         |
+| -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Back-end       | Node.js 22 (ES modules), Express 4 e Multer para o upload das fotos                                                                                 |
+| Banco de dados | SQLite nativo do Node (`node:sqlite`)                                                                                                             |
+| Documentos     | docxtemplater com módulo de imagem e PizZip para preencher o `.docx`; LibreOffice em modo headless para converter em PDF                         |
+| Integração   | API REST v3 do Clicksign (envelopes, signatários e observadores), com `fetch` nativo                                                             |
+| Segurança     | Módulo `crypto` do Node: hash `scrypt` com sal, comparação em tempo constante e tokens de sessão aleatórios; limite de tentativas próprio |
+| Front-end      | HTML, CSS (variáveis CSS, tema claro e escuro) e JavaScript puro em ES modules, sem framework e sem etapa de build                                 |
 
 **Poucas dependências, de propósito.** O projeto usa só 5 pacotes do npm. O resto
 vem do próprio Node: `fetch` no lugar do axios, `node:sqlite` no lugar de um driver
@@ -87,18 +87,18 @@ Para testar a assinatura, use uma conta de sandbox do Clicksign.
 
 As variáveis principais estão comentadas no [.env.example](.env.example).
 
-| Variável | Uso |
-|---|---|
-| `PORT` | Porta do servidor (padrão 3000) |
-| `FUSO_HORARIO` | Fuso do ano impresso nos termos (padrão `America/Sao_Paulo`) |
-| `LOGIN_USUARIO` / `LOGIN_SENHA_HASH` | Credencial de acesso. O hash vem de `npm run login:senha` |
-| `LOGIN_SESSAO_HORAS` | Horas até a sessão expirar (padrão 8) |
-| `CLICKSIGN_ACCESS_TOKEN` | Token da API do Clicksign. Sem ele, o envio para assinatura não aparece |
-| `CLICKSIGN_AMBIENTE` | `sandbox` (padrão) ou `producao` |
-| `CLICKSIGN_PASTA_ID` / `CLICKSIGN_OBSERVADORES` | Pasta dos envelopes e e-mails dos observadores. Obrigatórios em produção |
-| `CLICKSIGN_PRAZO_DIAS`, `CLICKSIGN_OBSERVADOR_QUANDO`, `CLICKSIGN_OBSERVADOR_RECEBE_DOCUMENTO` | Ajustes opcionais do envelope |
-| `PAINEL_INTERVALO_MINUTOS` | Intervalo mínimo entre conferências no Clicksign (padrão 10) |
-| `BANCO_ARQUIVO` | Caminho do banco do painel (padrão `dados/termsgen.db`) |
+| Variável                                                                                            | Uso                                                                         |
+| ---------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| `PORT`                                                                                             | Porta do servidor (padrão 3000)                                            |
+| `FUSO_HORARIO`                                                                                     | Fuso do ano impresso nos termos (padrão `America/Sao_Paulo`)             |
+| `LOGIN_USUARIO` / `LOGIN_SENHA_HASH`                                                             | Credencial de acesso. O hash vem de `npm run login:senha`                 |
+| `LOGIN_SESSAO_HORAS`                                                                               | Horas até a sessão expirar (padrão 8)                                    |
+| `CLICKSIGN_ACCESS_TOKEN`                                                                           | Token da API do Clicksign. Sem ele, o envio para assinatura não aparece    |
+| `CLICKSIGN_AMBIENTE`                                                                               | `sandbox` (padrão) ou `producao`                                       |
+| `CLICKSIGN_PASTA_ID` / `CLICKSIGN_OBSERVADORES`                                                  | Pasta dos envelopes e e-mails dos observadores. Obrigatórios em produção |
+| `CLICKSIGN_PRAZO_DIAS`, `CLICKSIGN_OBSERVADOR_QUANDO`, `CLICKSIGN_OBSERVADOR_RECEBE_DOCUMENTO` | Ajustes opcionais do envelope                                               |
+| `PAINEL_INTERVALO_MINUTOS`                                                                         | Intervalo mínimo entre conferências no Clicksign (padrão 10)             |
+| `BANCO_ARQUIVO`                                                                                    | Caminho do banco do painel (padrão `dados/termsgen.db`)                  |
 
 Comandos auxiliares:
 
@@ -141,21 +141,22 @@ Os modelos são arquivos Word comuns com tags do
 [docxtemplater](https://docxtemplater.com/). Dá para editá-los no Word ou no
 LibreOffice sem mexer no código, desde que as tags fiquem iguais.
 
-| Tag | Conteúdo |
-|---|---|
-| `{name}`, `{email}`, `{setor}` | Colaborador. Na assinatura dupla, também `{name2}` e `{email2}` |
-| `{dia}`, `{mes}`, `{ano}` | Data do termo |
-| `{modelCel}`, `{serialNumber}`, `{imei1}`, `{imei2}`, `{valor}` | Aparelho |
-| `{eC}`, `{eCExtenso}` | Estado do aparelho: a letra (N, B, R) e o texto por extenso |
-| `{qtUsb}`, `{CaboSincUsb}`, `{eU}`... | Quantidade, marcação e estado de cada acessório |
-| `{#temCordao}...{/temCordao}` | Linha que só aparece quando o cordão foi marcado |
-| `{numeroTel}`, `{etiqueta}`, `{valorFinal}` | Chip, etiqueta de patrimônio e valor total |
-| `{%fotoFrente}`, `{%fotoVerso}` | Fotos do aparelho |
+| Tag                                                                       | Conteúdo                                                            |
+| ------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| `{name}`, `{email}`, `{setor}`                                      | Colaborador. Na assinatura dupla, também `{name2}` e `{email2}` |
+| `{dia}`, `{mes}`, `{ano}`                                           | Data do termo                                                        |
+| `{modelCel}`, `{serialNumber}`, `{imei1}`, `{imei2}`, `{valor}` | Aparelho                                                             |
+| `{eC}`, `{eCExtenso}`                                                 | Estado do aparelho: a letra (N, B, R) e o texto por extenso          |
+| `{qtUsb}`, `{CaboSincUsb}`, `{eU}`...                               | Quantidade, marcação e estado de cada acessório                   |
+| `{#temCordao}...{/temCordao}`                                           | Linha que só aparece quando o cordão foi marcado                   |
+| `{numeroTel}`, `{etiqueta}`, `{valorFinal}`                         | Chip, etiqueta de patrimônio e valor total                          |
+| `{%fotoFrente}`, `{%fotoVerso}`                                       | Fotos do aparelho                                                    |
 
 A cautela usa `{name}`, `{usuario}`, `{setor}`, `{data}`, os laços
 `{#hardwares}` e `{#vazios}`, as fotos `{%foto1}` a `{%foto3}` e `{#descricao}`.
 
 **Para adicionar uma empresa:**
+
 1. Crie os modelos `EMPRESA_X.docx`, `EMPRESA_X_dev.docx` e `EMPRESA_X_fer.docx` em
    `templates/termos/` e em `templates/duplaAssinatura/`.
 2. Inclua os três nomes em `EMPRESAS_VALIDAS`, em [src/server.js](src/server.js).
