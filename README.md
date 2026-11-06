@@ -1,5 +1,11 @@
 # termsgen — Gerador de Termos de Responsabilidade
 
+![Node.js](https://img.shields.io/badge/Node.js-22.13%2B-5FA04E?logo=nodedotjs&logoColor=white)
+![Express](https://img.shields.io/badge/Express-4-000000?logo=express&logoColor=white)
+![SQLite](https://img.shields.io/badge/SQLite-node%3Asqlite-003B57?logo=sqlite&logoColor=white)
+![LibreOffice](https://img.shields.io/badge/LibreOffice-headless-18A303?logo=libreoffice&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-ES_modules-F7DF1E?logo=javascript&logoColor=black)
+
 Sistema web para a equipe de TI gerar, em PDF, os termos de entrega, devolução e
 férias de aparelhos corporativos, enviar cada termo para assinatura eletrônica no
 [Clicksign](https://www.clicksign.com/) e acompanhar quem já assinou.
@@ -36,13 +42,23 @@ O formulário valida os dados no navegador e no servidor, preenche um modelo Wor
 
 ## Tecnologias
 
-- **Servidor:** Node.js, Express, Multer e o SQLite embutido no Node (`node:sqlite`).
-- **Documentos:** docxtemplater (com o módulo de imagem) e PizZip para preencher o
-  `.docx`, e LibreOffice em modo headless para gerar o PDF.
-- **Interface:** HTML, CSS e JavaScript puros (ES modules), sem framework e sem
-  etapa de build. As regras de validação ficam num arquivo só
-  ([public/js/validations.js](public/js/validations.js)), importado pelo navegador
-  e pelo servidor.
+| Camada | Tecnologias |
+|---|---|
+| Back-end | Node.js 22 (ES modules), Express 4 e Multer para o upload das fotos |
+| Banco de dados | SQLite nativo do Node (`node:sqlite`) |
+| Documentos | docxtemplater com módulo de imagem e PizZip para preencher o `.docx`; LibreOffice em modo headless para converter em PDF |
+| Integração | API REST v3 do Clicksign (envelopes, signatários e observadores), com `fetch` nativo |
+| Segurança | Módulo `crypto` do Node: hash `scrypt` com sal, comparação em tempo constante e tokens de sessão aleatórios; limite de tentativas próprio |
+| Front-end | HTML, CSS (variáveis CSS, tema claro e escuro) e JavaScript puro em ES modules, sem framework e sem etapa de build |
+
+**Poucas dependências, de propósito.** O projeto usa só 5 pacotes do npm. O resto
+vem do próprio Node: `fetch` no lugar do axios, `node:sqlite` no lugar de um driver
+de banco, `crypto.scrypt` no lugar do bcrypt, `--env-file` no lugar do dotenv e
+`--watch` no lugar do nodemon.
+
+As regras de validação ficam num arquivo só
+([public/js/validations.js](public/js/validations.js)), importado pelo navegador e
+pelo servidor.
 
 ## Como rodar
 
